@@ -1,29 +1,28 @@
-const tf = require('@tensorflow/tfjs-node');
+const tf = require("@tensorflow/tfjs-node");
+const Movie = require("./models/movie");
 
 const loadData = async () => {
-  // Ambil seluruh data movie dari database
+  const movies = await Movie.find();
 
   const movie_arr = [];
   for (let i = 0; i < movies.length; i++) {
-    movie_arr.push([movies[i]['movie_id']]);
+    movie_arr.push([movies[i]["movie_id"]]);
   }
   return movie_arr;
 };
 
 async function loadModel() {
-  console.log('Loading Model...');
-  model = await tf.loadLayersModel(
-    `file://${__dirname}/models/model.json`,
-    false
-  );
-  console.log('Model Loaded Successfull');
+  console.log("Loading Model...");
+  model = await tf.loadLayersModel(`file://${__dirname}/models/model.json`, false);
+  console.log("Model Loaded Successfull");
+  // model.summary()
 }
 
 const recommend = async function recommend(userId) {
   const movie_data = await loadData();
 
   const movie_arr = tf.tensor(movie_data);
-  // Ambil seluruh data movie dari database
+  const movies = await Movie.find();
 
   const movie_len = movie_data.length;
 
